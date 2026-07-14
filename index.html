@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Smart CMMS for manufacturing plants — preventive maintenance, corrective workflows, asset reliability, workforce control, and executive KPIs." />
+  <title>RUKN Smart CMMS</title>
+  <style>
+    :root {
+      --navy:#081d3d;
+      --blue:#1267e8;
+      --sky:#27a8ef;
+      --amber:#f2a31b;
+      --green:#14a66a;
+      --slate:#54657d;
+      --line:#dfe8f3;
+      --soft:#f5f9fd;
+      --white:#ffffff;
+      --danger:#d94f4f;
+      --shadow:0 24px 70px rgba(8,29,61,.14);
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body {
+      margin:0;
+      color:var(--navy);
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 10% 8%, rgba(39,168,239,.10), transparent 30%),
+        linear-gradient(180deg,#fff 0%,#f8fbff 55%,#fff 100%);
+      overflow-x:hidden;
+    }
+    a { color:inherit; text-decoration:none; }
+    .container { width:min(1180px, calc(100% - 40px)); margin:auto; }
+    .nav {
+      position:sticky; top:0; z-index:50;
+      backdrop-filter:blur(18px);
+      background:rgba(255,255,255,.86);
+      border-bottom:1px solid rgba(223,232,243,.9);
+    }
+    .nav-inner {
+      height:76px; display:flex; align-items:center; justify-content:space-between; gap:24px;
+    }
+    .brand { display:flex; align-items:center; gap:12px; font-weight:900; letter-spacing:.12em; }
+    .brand-mark {
+      width:42px; height:42px; border-radius:13px;
+      display:grid; place-items:center; color:#fff; font-weight:900;
+      background:linear-gradient(135deg,var(--blue),var(--sky));
+      box-shadow:0 12px 28px rgba(18,103,232,.26);
+    }
+    .nav-links { display:flex; gap:28px; font-weight:700; color:#42536a; font-size:14px; }
+    .nav-links a:hover { color:var(--blue); }
+    .btn {
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+      min-height:48px; padding:0 22px; border-radius:14px; border:1px solid transparent;
+      font-weight:800; transition:.2s ease; cursor:pointer;
+    }
+    .btn-primary {
+      color:#fff; background:linear-gradient(135deg,var(--blue),#0850c8);
+      box-shadow:0 14px 30px rgba(18,103,232,.24);
+    }
+    .btn-primary:hover { transform:translateY(-2px); }
+    .btn-light { background:#fff; border-color:var(--line); color:var(--navy); }
+    .hero {
+      position:relative; min-height:760px; display:flex; align-items:center; padding:90px 0 70px;
+    }
+    .hero::before {
+      content:""; position:absolute; inset:0 0 auto auto; width:52%; height:100%;
+      background:linear-gradient(180deg,rgba(18,103,232,.05),transparent);
+      clip-path:polygon(25% 0,100% 0,100% 100%,0 100%);
+      z-index:-1;
+    }
+    .hero-grid { display:grid; grid-template-columns:1.02fr .98fr; align-items:start; gap:64px; padding-top:12px; }
+    .eyebrow {
+      display:inline-flex; align-items:center; gap:10px; padding:9px 13px; border-radius:999px;
+      background:#eaf4ff; color:var(--blue); font-weight:900; font-size:13px; letter-spacing:.04em;
+      border:1px solid #d7e9ff;
+    }
+    h1 { margin:22px 0 18px; font-size:clamp(40px,5.4vw,68px); line-height:1.04; letter-spacing:-.045em; }
+    .type-line {
+      display:block; color:var(--blue);
+      font-size:clamp(26px,3.2vw,40px); line-height:1.3; letter-spacing:-.02em;
+      max-width:620px; min-height:2.6em;
+    }
+    .cursor { display:inline-block; width:3px; height:.85em; margin-left:5px; background:var(--amber); animation:blink .8s infinite; vertical-align:-0.1em; }
+    @keyframes blink { 50% { opacity:0; } }
+    .hero p { font-size:20px; line-height:1.75; color:var(--slate); margin:0 0 28px; max-width:650px; }
+    .hero-actions { display:flex; flex-wrap:wrap; gap:14px; margin-bottom:36px; }
+    .trust-row { display:flex; flex-wrap:wrap; gap:18px; color:#516078; font-weight:750; font-size:14px; }
+    .trust-row span::before { content:"✓"; color:var(--green); margin-right:8px; font-weight:1000; }
+    .hero-card {
+      position:relative; border-radius:30px; padding:14px; background:#fff; border:1px solid #e6eef7;
+      box-shadow:var(--shadow); transform:rotate(1deg);
+    }
+    .hero-card img { width:100%; display:block; border-radius:22px; }
+    .floating {
+      position:absolute; padding:14px 18px; border-radius:16px; background:#fff;
+      box-shadow:0 16px 38px rgba(8,29,61,.16); font-weight:900; border:1px solid #edf2f7;
+    }
+    .float-a { left:-34px; top:60px; color:var(--green); }
+    .float-b { right:-24px; bottom:54px; color:var(--amber); }
+    section { padding:94px 0; }
+    .section-head { max-width:760px; margin:0 auto 48px; text-align:center; }
+    .section-head h2 { font-size:clamp(34px,4vw,54px); line-height:1.08; letter-spacing:-.04em; margin:10px 0 14px; }
+    .section-head p { margin:0; font-size:18px; line-height:1.7; color:var(--slate); }
+    .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:18px; }
+    .stat {
+      padding:26px; border-radius:22px; background:#fff; border:1px solid var(--line);
+      box-shadow:0 14px 36px rgba(8,29,61,.07);
+    }
+    .stat strong { display:block; font-size:35px; color:var(--blue); margin-bottom:7px; }
+    .stat span { color:var(--slate); font-weight:760; line-height:1.45; }
+    .flow { display:grid; grid-template-columns:repeat(4,1fr); gap:18px; position:relative; }
+    .flow::before {
+      content:""; position:absolute; left:10%; right:10%; top:44px; height:2px;
+      background:linear-gradient(90deg,var(--amber),var(--blue),var(--green)); z-index:0;
+    }
+    .step { position:relative; z-index:1; text-align:center; padding:0 10px; }
+    .step-icon {
+      width:88px; height:88px; margin:0 auto 18px; border-radius:24px; display:grid; place-items:center;
+      font-size:36px; background:#fff; border:1px solid var(--line); box-shadow:0 16px 40px rgba(8,29,61,.1);
+    }
+    .step h3 { margin:0 0 8px; font-size:21px; }
+    .step p { margin:0; color:var(--slate); line-height:1.6; }
+    .feature-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+    .feature {
+      background:#fff; border:1px solid var(--line); border-radius:24px; padding:28px;
+      box-shadow:0 16px 44px rgba(8,29,61,.07); transition:.2s ease;
+    }
+    .feature:hover { transform:translateY(-6px); box-shadow:0 24px 54px rgba(8,29,61,.12); }
+    .feature-icon { width:54px; height:54px; border-radius:16px; display:grid; place-items:center; font-size:25px; background:#eaf4ff; }
+    .feature h3 { margin:18px 0 9px; font-size:21px; }
+    .feature p { margin:0; color:var(--slate); line-height:1.65; }
+    .showcase {
+      display:grid; grid-template-columns:.9fr 1.1fr; gap:46px; align-items:center;
+      background:linear-gradient(135deg,#071a38,#0d3267); color:#fff; border-radius:34px; padding:46px;
+      box-shadow:0 28px 80px rgba(8,29,61,.22);
+    }
+    .showcase h2 { font-size:46px; line-height:1.08; letter-spacing:-.04em; margin:0 0 18px; }
+    .showcase p { color:#cbd9ea; font-size:18px; line-height:1.75; }
+    .showcase ul { list-style:none; padding:0; margin:24px 0 0; display:grid; gap:14px; }
+    .showcase li { color:#e7eef8; font-weight:700; }
+    .showcase li::before { content:"●"; color:var(--sky); margin-right:10px; }
+    .showcase img { width:100%; border-radius:24px; box-shadow:0 24px 64px rgba(0,0,0,.28); aspect-ratio:16/11; object-fit:cover; object-position:top; }
+    .image-panel {
+      padding:16px; border-radius:28px; background:#fff; border:1px solid var(--line); box-shadow:var(--shadow);
+    }
+    .image-panel img { width:100%; display:block; border-radius:20px; aspect-ratio:16/8; object-fit:cover; object-position:top; }
+    .split { display:grid; grid-template-columns:1fr 1fr; gap:26px; }
+    .expert {
+      position:relative; display:flex; align-items:center; overflow:visible; border-radius:28px; min-height:340px;
+      border:1px solid var(--line); background:#fff; box-shadow:0 18px 48px rgba(8,29,61,.08);
+    }
+    .expert:nth-child(2) { background:linear-gradient(180deg,#fffaf2,#fff); }
+    .expert-photo-col {
+      flex:0 0 auto; align-self:flex-end; margin:0 0 -24px -38px; z-index:2; overflow:visible;
+    }
+    .expert-photo {
+      display:block; height:min(400px, 50vw); width:auto; max-width:58vw;
+      filter:drop-shadow(0 18px 22px rgba(8,29,61,.28));
+    }
+    .expert-body { flex:1; min-width:0; padding:34px 30px 34px 18px; display:flex; flex-direction:column; justify-content:center; }
+    .expert .tag { display:inline-block; padding:8px 12px; border-radius:999px; background:#eaf4ff; color:var(--blue); font-weight:900; align-self:flex-start; }
+    .expert:nth-child(2) .tag { background:#fff0d2; color:#b56c00; }
+    .expert h3 { font-size:28px; margin:16px 0 8px; }
+    .expert p { color:var(--slate); line-height:1.65; }
+    .expert ul { padding-left:20px; color:#34445b; line-height:1.85; }
+    @media (max-width:860px) {
+      .expert-photo-col { margin-left:-26px; }
+      .expert-photo { height:min(320px, 46vw); }
+      .expert-body { padding-left:8px; }
+    }
+    @media (max-width:620px) {
+      .expert { flex-direction:column; align-items:center; padding-top:30px; }
+      .expert-photo-col { margin:0 0 -10px; align-self:center; }
+      .expert-photo { height:280px; max-width:78vw; }
+      .expert-body { padding-left:20px; align-items:flex-start; }
+    }
+    .cta {
+      text-align:center; padding:76px 32px; border-radius:34px;
+      background:
+        radial-gradient(circle at 15% 20%,rgba(39,168,239,.18),transparent 30%),
+        linear-gradient(135deg,#071a38,#0d3267);
+      color:#fff; box-shadow:0 28px 80px rgba(8,29,61,.2);
+    }
+    .cta h2 { font-size:clamp(38px,5vw,62px); margin:0 0 14px; letter-spacing:-.04em; }
+    .cta p { color:#cbd9ea; font-size:19px; max-width:720px; margin:0 auto 28px; line-height:1.7; }
+    footer { padding:34px 0 46px; color:#66758a; }
+    .footer-inner { display:flex; justify-content:space-between; align-items:center; gap:20px; }
+    @media (max-width:950px) {
+      .nav-links { display:none; }
+      .hero-grid,.showcase,.split { grid-template-columns:1fr; }
+      .hero { padding-top:54px; min-height:auto; }
+      .hero-card { max-width:760px; margin:auto; transform:none; }
+      .stats,.flow { grid-template-columns:repeat(2,1fr); }
+      .flow::before { display:none; }
+      .feature-grid { grid-template-columns:1fr 1fr; }
+      .showcase { padding:30px; }
+    }
+    @media (max-width:620px) {
+      .container { width:min(100% - 24px,1180px); }
+      .nav .btn-primary { display:none; }
+      .stats,.flow,.feature-grid { grid-template-columns:1fr; }
+      h1 { font-size:48px; }
+      .hero p { font-size:17px; }
+      .floating { display:none; }
+      section { padding:70px 0; }
+      .showcase h2 { font-size:36px; }
+      .footer-inner { flex-direction:column; align-items:flex-start; }
+    }
+
+    /* ---- scroll reveal ---- */
+    .reveal { opacity:0; transform:translateY(22px); transition:opacity .7s ease, transform .7s ease; }
+    .reveal.in { opacity:1; transform:none; }
+
+    /* ---- machine motion: conveyor belt under the workflow steps ---- */
+    .flow::before {
+      background:repeating-linear-gradient(90deg,var(--amber) 0 10px, var(--blue) 10px 20px, var(--green) 20px 30px);
+      background-size:30px 100%;
+      animation:beltmove 1.4s linear infinite;
+    }
+    .gear {
+      position:absolute; width:30px; height:30px; opacity:.9;
+      animation:spin 6s linear infinite;
+      transform-origin:50% 50%;
+    }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    @keyframes beltmove { to { background-position:-30px 0; } }
+
+    /* ---- before / after comparison sliders ---- */
+    .compare-grid { display:grid; gap:26px; }
+    .compare {
+      border-radius:26px; overflow:hidden; border:1px solid var(--line);
+      background:#fff; box-shadow:0 14px 36px rgba(8,29,61,.08);
+    }
+    .compare-media { position:relative; aspect-ratio:16/9; overflow:hidden; --pos:50%; background:var(--soft); }
+    .compare-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+    .compare-before { clip-path:inset(0 calc(100% - var(--pos)) 0 0); }
+    .compare-line {
+      position:absolute; top:0; bottom:0; left:var(--pos); width:3px;
+      background:#fff; transform:translateX(-1.5px); pointer-events:none;
+      box-shadow:0 0 0 1px rgba(8,29,61,.15);
+    }
+    .compare-line::after {
+      content:"⇔"; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+      width:42px; height:42px; border-radius:50%; background:#fff; color:var(--blue);
+      display:grid; place-items:center; font-weight:900; font-size:15px;
+      box-shadow:0 8px 20px rgba(8,29,61,.28);
+    }
+    .compare-range {
+      position:absolute; inset:0; width:100%; height:100%; margin:0;
+      opacity:0; cursor:ew-resize; appearance:none; -webkit-appearance:none;
+    }
+    .compare-tags { position:absolute; top:14px; left:14px; right:14px; display:flex; justify-content:space-between; pointer-events:none; }
+    .compare-tag { font-size:11.5px; font-weight:900; letter-spacing:.05em; text-transform:uppercase; padding:6px 11px; border-radius:999px; color:#fff; }
+    .compare-tag.before { background:rgba(217,79,79,.92); }
+    .compare-tag.after { background:rgba(20,166,106,.92); }
+    .compare-caption { display:flex; flex-wrap:wrap; justify-content:space-between; gap:10px 16px; padding:16px 20px; font-size:13.5px; font-weight:750; color:var(--slate); }
+    .compare-caption b { color:var(--navy); font-weight:800; }
+
+    /* ---- impact bar chart ---- */
+    .impact-chart {
+      margin-top:36px; background:#fff; border:1px solid var(--line); border-radius:22px;
+      padding:28px 30px; box-shadow:0 14px 36px rgba(8,29,61,.07);
+    }
+    .bar-row { display:grid; grid-template-columns:200px 1fr 28px; align-items:center; gap:16px; margin-bottom:16px; }
+    .bar-row:last-child { margin-bottom:0; }
+    .bar-label { font-weight:750; font-size:13.5px; color:#34445b; }
+    .bar-track { height:10px; border-radius:999px; background:var(--soft); overflow:hidden; }
+    .bar-fill { display:block; height:100%; width:0; border-radius:999px; transition:width 1.2s cubic-bezier(.2,.8,.2,1); }
+    .bar-fill.up { background:linear-gradient(90deg,var(--blue),var(--green)); }
+    .bar-fill.down { background:linear-gradient(90deg,var(--amber),var(--danger)); }
+    .bar-val { text-align:center; font-weight:900; }
+    @media (max-width:620px) { .bar-row { grid-template-columns:120px 1fr 22px; } .bar-label { font-size:12px; } }
+
+    /* ---- top-of-page pulse chart ---- */
+    .pulse-panel {
+      background:#fff; border:1px solid var(--line); border-radius:24px;
+      padding:22px 26px 26px; box-shadow:0 14px 36px rgba(8,29,61,.08);
+    }
+    .pulse-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; }
+    .pulse-live { display:flex; align-items:center; gap:8px; font-weight:800; font-size:12.5px; color:var(--green); }
+    .pulse-dot { width:8px; height:8px; border-radius:50%; background:var(--green); box-shadow:0 0 0 4px rgba(20,166,106,.18); animation:pulseDot 2.2s ease-in-out infinite; }
+    @keyframes pulseDot { 0%,100% { box-shadow:0 0 0 4px rgba(20,166,106,.18); } 50% { box-shadow:0 0 0 8px rgba(20,166,106,.05); } }
+    .pulse-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
+    @media (max-width:900px) { .pulse-grid { grid-template-columns:1fr 1fr; } }
+    @media (max-width:560px) { .pulse-grid { grid-template-columns:1fr; } }
+    .pulse-top { display:flex; align-items:baseline; gap:8px; margin-bottom:6px; }
+    .pulse-num { font-size:30px; font-weight:900; color:var(--navy); letter-spacing:-.02em; }
+    .pulse-metric.good .pulse-trend { color:var(--green); }
+    .pulse-metric.bad .pulse-trend { color:var(--danger); }
+    .pulse-trend { font-weight:900; font-size:16px; }
+    .pulse-label { font-size:13px; font-weight:700; color:var(--slate); margin-bottom:10px; }
+
+    /* ---- tabs (before / after, gallery) ---- */
+    .tablist { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-bottom:30px; }
+    .tab-btn {
+      font-weight:800; font-size:14px; color:var(--slate); background:#fff;
+      border:1px solid var(--line); border-radius:999px; padding:11px 20px; cursor:pointer;
+      transition:.15s ease;
+    }
+    .tab-btn:hover { border-color:var(--blue); color:var(--blue); }
+    .tab-btn[aria-selected="true"] {
+      background:linear-gradient(135deg,var(--blue),#0850c8); border-color:transparent; color:#fff;
+      box-shadow:0 10px 24px rgba(18,103,232,.28);
+    }
+    .tabpanel[hidden] { display:none; }
+
+    /* ---- module showcase switcher ---- */
+    .showcase-switch { display:grid; grid-template-columns:.85fr 1.15fr; gap:32px; align-items:stretch; }
+    @media (max-width:860px) { .showcase-switch { grid-template-columns:1fr; } }
+    .switch-list { display:flex; flex-direction:column; gap:10px; }
+    .switch-item {
+      display:flex; align-items:center; gap:14px; text-align:left; width:100%;
+      padding:16px 18px; border-radius:18px; border:1px solid var(--line); background:#fff;
+      cursor:pointer; transition:.15s ease; font-family:inherit;
+    }
+    .switch-item:hover { border-color:var(--blue); }
+    .switch-item[aria-selected="true"] { border-color:var(--blue); background:#eaf4ff; box-shadow:0 10px 26px rgba(18,103,232,.12); }
+    .switch-icon {
+      width:42px; height:42px; flex:none; border-radius:12px; display:grid; place-items:center;
+      font-size:19px; background:#eaf4ff;
+    }
+    .switch-item[aria-selected="true"] .switch-icon { background:linear-gradient(135deg,var(--blue),var(--sky)); color:#fff; }
+    .switch-title { font-weight:800; font-size:15.5px; color:var(--navy); }
+    .switch-desc { font-size:13px; color:var(--slate); margin-top:2px; line-height:1.5; }
+    .switch-display { position:relative; border-radius:26px; overflow:hidden; border:1px solid var(--line); box-shadow:var(--shadow); background:#fff; }
+    .switch-frame { display:flex; flex-direction:column; }
+    .switch-frame[hidden] { display:none; }
+    .switch-frame img { width:100%; aspect-ratio:16/10; display:block; object-fit:cover; object-position:top; }
+    .switch-frame figcaption { padding:14px 20px; font-weight:800; font-size:14px; color:var(--navy); border-top:1px solid var(--line); }
+
+    /* ---- sentence-synced mini chart ---- */
+    .sentence-chart-wrap { margin:14px 0 22px; max-width:620px; }
+    .sentence-chart {
+      height:150px; background:#fff; border:1px solid var(--line); border-radius:16px;
+      padding:12px 18px; box-shadow:0 10px 26px rgba(8,29,61,.08); position:relative; overflow:hidden;
+    }
+    .sc-label { font-size:11px; font-weight:800; color:var(--slate); letter-spacing:.03em; text-transform:uppercase; margin-bottom:8px; }
+    .sc-fade-in { animation:scFadeIn .35s ease both; }
+    @keyframes scFadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+
+    .sc-gauge-row { display:flex; align-items:center; gap:16px; }
+    .sc-gauge svg { width:64px; height:64px; }
+    .sc-gauge .ring { transition:stroke-dashoffset 1s cubic-bezier(.2,.8,.2,1); }
+    .sc-gauge-val { font-weight:900; font-size:20px; color:var(--navy); }
+    .sc-gauge-sub { font-size:12.5px; color:var(--slate); font-weight:700; max-width:22ch; }
+
+    .sc-bar-track { height:12px; border-radius:999px; background:var(--soft); overflow:hidden; margin-top:10px; }
+    .sc-bar-fill { display:block; height:100%; border-radius:999px; width:0; transition:width 1.1s cubic-bezier(.2,.8,.2,1); }
+    .sc-bar-fill.good { background:linear-gradient(90deg,var(--blue),var(--green)); }
+    .sc-bar-fill.bad { background:linear-gradient(90deg,var(--amber),var(--danger)); }
+    .sc-bar-num { font-weight:900; font-size:22px; color:var(--navy); }
+
+    .sc-stack-track { height:14px; border-radius:999px; background:var(--soft); overflow:hidden; margin-top:10px; display:flex; }
+    .sc-stack-a, .sc-stack-b { height:100%; width:0; transition:width 1.1s cubic-bezier(.2,.8,.2,1); }
+    .sc-stack-a { background:var(--green); }
+    .sc-stack-b { background:var(--danger); }
+    .sc-legend { display:flex; gap:14px; margin-top:8px; font-size:11.5px; font-weight:700; color:var(--slate); }
+    .sc-legend span::before { content:""; display:inline-block; width:8px; height:8px; border-radius:2px; margin-right:5px; vertical-align:1px; }
+    .sc-legend .a::before { background:var(--green); }
+    .sc-legend .b::before { background:var(--danger); }
+
+    .sc-stock-row { display:flex; align-items:center; gap:10px; margin-top:7px; font-size:12px; font-weight:700; color:var(--slate); }
+    .sc-stock-row .lbl { flex:0 0 62px; }
+    .sc-stock-track { flex:1; height:9px; border-radius:999px; background:var(--soft); overflow:hidden; }
+    .sc-stock-fill { display:block; height:100%; width:0; border-radius:999px; background:linear-gradient(90deg,var(--blue),var(--sky)); transition:width 1s cubic-bezier(.2,.8,.2,1); }
+
+    .sc-dots-row { display:flex; flex-wrap:wrap; gap:7px; margin-top:6px; }
+    .sc-dot {
+      width:16px; height:16px; border-radius:5px; background:var(--soft); border:1px solid var(--line);
+      opacity:0; transform:scale(.6); transition:opacity .3s ease, transform .3s ease, background .3s ease;
+    }
+    .sc-dot.on { opacity:1; transform:none; background:var(--green); border-color:transparent; }
+
+    .sc-counter-num { font-weight:900; font-size:32px; color:var(--navy); }
+
+    .sc-label-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+    .sc-label-row .sc-label { margin-bottom:0; }
+    .sc-spark-delta { font-size:12px; font-weight:900; padding:2px 8px; border-radius:999px; transition:opacity .3s ease; }
+    .sc-spark-delta.good { color:var(--green); background:#e7f7ef; }
+    .sc-spark-delta.bad { color:var(--danger); background:#fdecec; }
+
+    .sc-spark-wrap { position:relative; }
+    .sc-spark { width:100%; height:52px; display:block; }
+    .sc-spark path.line { fill:none; stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round; }
+    .sc-spark .line.good { stroke:var(--green); }
+    .sc-spark .line.bad { stroke:var(--danger); }
+    .sc-spark .fill { opacity:.14; }
+    .sc-spark .fill.good { fill:var(--green); }
+    .sc-spark .fill.bad { fill:var(--danger); }
+    .sc-spark-endpoint {
+      position:absolute; width:8px; height:8px; margin:-4px 0 0 -4px; border-radius:50%;
+      opacity:0; transition:opacity .25s ease;
+    }
+    .sc-spark-endpoint.good { background:var(--green); }
+    .sc-spark-endpoint.bad { background:var(--danger); }
+    .sc-spark-endpoint::after {
+      content:""; position:absolute; inset:-5px; border-radius:50%; border:2px solid;
+      animation:scRingPing 1.8s ease-out infinite;
+    }
+    .sc-spark-endpoint.good::after { border-color:var(--green); }
+    .sc-spark-endpoint.bad::after { border-color:var(--danger); }
+    @keyframes scRingPing {
+      0% { transform:scale(.6); opacity:.6; }
+      100% { transform:scale(2.1); opacity:0; }
+    }
+
+    .sc-ticker { display:flex; flex-direction:column; gap:7px; margin-top:6px; }
+    .sc-ticker-row {
+      display:flex; align-items:center; gap:10px;
+      opacity:0; transform:translateX(-8px); transition:opacity .35s ease, transform .35s ease;
+    }
+    .sc-ticker-row.on { opacity:1; transform:none; }
+    .sc-ticker-dot { width:8px; height:8px; border-radius:50%; flex:none; }
+    .sc-ticker-dot.bad { background:var(--danger); animation:scPing 1.6s ease-in-out infinite; }
+    .sc-ticker-dot.warn { background:var(--amber); }
+    .sc-ticker-dot.good { background:var(--green); }
+    .sc-ticker-dot.info { background:var(--blue); }
+    @keyframes scPing { 0%,100% { box-shadow:0 0 0 0 rgba(217,79,79,.3); } 50% { box-shadow:0 0 0 6px rgba(217,79,79,0); } }
+    .sc-ticker-text { font-size:12.5px; font-weight:700; color:var(--navy); line-height:1.3; }
+
+    .sc-scorecard-row { display:grid; grid-template-columns:repeat(6, 1fr); gap:6px; margin-top:6px; }
+    .sc-mg { display:flex; flex-direction:column; align-items:center; gap:3px; }
+    .sc-mg svg { width:40px; height:40px; }
+    .sc-mg .ring { transition:stroke-dashoffset 1s cubic-bezier(.2,.8,.2,1); }
+    .sc-mg-val { font-weight:900; font-size:11.5px; color:var(--navy); }
+    .sc-mg-lbl { font-size:8.5px; font-weight:700; color:var(--slate); text-align:center; line-height:1.2; }
+    .visually-hidden {
+      position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+      overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+      .reveal { opacity:1; transform:none; transition:none; }
+      .flow::before { animation:none; }
+      .gear { animation:none; }
+      .bar-fill { transition:none; }
+      .pulse-dot { animation:none; }
+      .sc-fade-in { animation:none; }
+      .sc-gauge .ring, .sc-bar-fill, .sc-stack-a, .sc-stack-b, .sc-stock-fill, .sc-spark path.line, .sc-mg .ring { transition:none; }
+      .sc-dot { transition:none; }
+      .sc-ticker-row { transition:none; }
+      .sc-ticker-dot { animation:none; }
+      .sc-spark-endpoint { transition:none; opacity:1; }
+      .sc-spark-endpoint::after { animation:none; }
+      .sc-spark-delta { transition:none; opacity:1; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="#top"><span class="brand-mark">R</span><span>RUKN</span></a>
+      <div class="nav-links">
+        <a href="#impact">Impact</a>
+        <a href="#workflow">Workflow</a>
+        <a href="#platform">Platform</a>
+        <a href="#compare">Before / After</a>
+        <a href="#team">Expertise</a>
+      </div>
+      <a class="btn btn-primary" href="#pilot">Request a Pilot</a>
+    </div>
+  </nav>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <span class="eyebrow">SMART CMMS FOR MANUFACTURING</span>
+          <h1>
+            System that keeps
+            <span class="type-line"><span id="typewriter"></span><span class="cursor"></span></span>
+          </h1>
+          <div class="sentence-chart-wrap">
+            <div class="sentence-chart" id="sentenceChart" aria-hidden="true"></div>
+            <span class="visually-hidden" id="sentenceChartDesc"></span>
+          </div>
+          <p>
+            A plant-wide maintenance system that turns assets, preventive schedules, breakdowns,
+            workforce execution, reports, and executive KPIs into one clear operating picture.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#pilot">Start with one production line</a>
+            <a class="btn btn-light" href="#platform">Explore the system</a>
+          </div>
+          <div class="trust-row">
+            <span>Web and mobile</span>
+            <span>Offline-capable</span>
+            <span>Arabic and English</span>
+            <span>Single-factory deployment</span>
+          </div>
+        </div>
+        <div class="hero-card">
+          <img src="images/Equipment%20Management%20Module.png" alt="Smart CMMS manufacturing maintenance overview" loading="eager" decoding="async" />
+          <div class="floating float-a">Planned maintenance ↑</div>
+          <div class="floating float-b">Unplanned downtime ↓</div>
+          <svg class="gear" style="right:-14px; top:-14px; color:var(--blue);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+            <circle cx="12" cy="12" r="3.1"/>
+            <path d="M12 2v3M12 19v3M22 12h-3M5 12H2M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1M18.4 18.4l-2.1-2.1M7.7 7.7 5.6 5.6"/>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <section id="pulse" aria-labelledby="pulse-h">
+      <div class="container" style="padding-top:0;">
+        <div class="pulse-panel reveal">
+          <div class="pulse-head">
+            <span class="eyebrow" id="pulse-h">LIVE PLANT SIGNAL</span>
+            <span class="pulse-live"><span class="pulse-dot" aria-hidden="true"></span> Updating live</span>
+          </div>
+          <div class="pulse-grid" role="img" aria-label="Illustrative pattern: planned maintenance completion and tracked PM lines rise, while unplanned downtime and open backlog fall, after adopting the system.">
+            <div class="pulse-metric good">
+              <div class="pulse-top"><span class="pulse-num" data-start="0" data-target="93" data-suffix="%">0%</span><span class="pulse-trend" aria-hidden="true">↑</span></div>
+              <div class="pulse-label">Planned maintenance completed</div>
+              <div class="bar-track"><span class="bar-fill up" data-w="93"></span></div>
+            </div>
+            <div class="pulse-metric bad">
+              <div class="pulse-top"><span class="pulse-num" data-start="100" data-target="26" data-suffix="%">100%</span><span class="pulse-trend" aria-hidden="true">↓</span></div>
+              <div class="pulse-label">Unplanned downtime</div>
+              <div class="bar-track"><span class="bar-fill down" data-w="26" style="width:100%;"></span></div>
+            </div>
+            <div class="pulse-metric bad">
+              <div class="pulse-top"><span class="pulse-num" data-start="100" data-target="33" data-suffix="%">100%</span><span class="pulse-trend" aria-hidden="true">↓</span></div>
+              <div class="pulse-label">Open repair backlog</div>
+              <div class="bar-track"><span class="bar-fill down" data-w="33" style="width:100%;"></span></div>
+            </div>
+            <div class="pulse-metric good">
+              <div class="pulse-top"><span class="pulse-num" data-start="0" data-target="312" data-suffix="">0</span><span class="pulse-trend" aria-hidden="true">↑</span></div>
+              <div class="pulse-label">PM lines tracked</div>
+              <div class="bar-track"><span class="bar-fill up" data-w="88"></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="impact">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">BUSINESS IMPACT</span>
+          <h2>What management gains from day one</h2>
+          <p>Every feature is tied to an operational outcome: less disruption, faster response, stronger control, and better decisions.</p>
+        </div>
+        <div class="stats">
+          <div class="stat"><strong>Less downtime</strong><span>Prevent failures before production is interrupted.</span></div>
+          <div class="stat"><strong>Faster repair</strong><span>Give teams the right task, asset history, and priority immediately.</span></div>
+          <div class="stat"><strong>Higher reliability</strong><span>Build a permanent maintenance record for every asset.</span></div>
+          <div class="stat"><strong>Clear control</strong><span>See workload, compliance, delays, and risk from one dashboard.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="workflow">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">HOW IT WORKS</span>
+          <h2>From problem to action, record, and insight</h2>
+        </div>
+        <div class="flow">
+          <div class="step"><div class="step-icon">⚠️</div><h3>Detect</h3><p>A worker reports an issue or the system identifies a due maintenance task.</p></div>
+          <div class="step"><div class="step-icon">🛠️</div><h3>Act</h3><p>Work is prioritized and assigned to internal or external maintenance resources.</p></div>
+          <div class="step"><div class="step-icon">📋</div><h3>Record</h3><p>Actions, findings, parts, time, downtime, and completion are permanently documented.</p></div>
+          <div class="step"><div class="step-icon">📈</div><h3>Improve</h3><p>Management sees trends, bottlenecks, reliability KPIs, and the next priorities.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="platform">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">ONE CONNECTED PLATFORM</span>
+          <h2>Everything maintenance needs, without scattered files</h2>
+        </div>
+        <div class="feature-grid">
+          <article class="feature"><div class="feature-icon">⚙️</div><h3>Asset Registry</h3><p>A single source of truth for equipment, location, history, documents, and condition.</p></article>
+          <article class="feature"><div class="feature-icon">🛡️</div><h3>Preventive Maintenance</h3><p>Recurring schedules, due-status escalation, checklists, and automatic re-arming.</p></article>
+          <article class="feature"><div class="feature-icon">🔧</div><h3>Corrective Work</h3><p>Structured repair workflow from reported fault to assignment, completion, and report.</p></article>
+          <article class="feature"><div class="feature-icon">👥</div><h3>Workforce Control</h3><p>Track assigned, overdue, due-soon, and completed tasks for internal and external workers.</p></article>
+          <article class="feature"><div class="feature-icon">🔔</div><h3>Real-Time Alerts</h3><p>In-app, email, mobile push, and SMS notifications for employees and contractors.</p></article>
+          <article class="feature"><div class="feature-icon">📊</div><h3>Executive KPIs</h3><p>PM compliance, MTBF, MTTR, downtime, backlog, emergency work, and asset health.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="compare">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">BEFORE / AFTER</span>
+          <h2>Drag to see the floor change</h2>
+          <p>Pick a part of the operation, then drag the line to compare the day-to-day before a system like this, and after it's running.</p>
+        </div>
+
+        <div class="tablist" role="tablist" aria-label="Before and after comparisons">
+          <button class="tab-btn" role="tab" id="ctab-0" aria-selected="true" aria-controls="cpanel-0" tabindex="0">Production Line</button>
+          <button class="tab-btn" role="tab" id="ctab-1" aria-selected="false" aria-controls="cpanel-1" tabindex="-1">Maintenance Operations</button>
+          <button class="tab-btn" role="tab" id="ctab-2" aria-selected="false" aria-controls="cpanel-2" tabindex="-1">Spare Parts &amp; Inventory</button>
+        </div>
+
+        <div class="tabpanel" id="cpanel-0" role="tabpanel" aria-labelledby="ctab-0" tabindex="0">
+          <figure class="compare">
+            <div class="compare-media">
+              <img class="compare-img compare-after" src="images/Smooth%20Production%20%26%20Controlled%20Operations.png" alt="After: smooth production and controlled operations" loading="lazy" decoding="async" />
+              <img class="compare-img compare-before" src="images/Production%20Delays%20%26%20Unexpected%20Downtime.png" alt="Before: production delays and unexpected downtime" loading="lazy" decoding="async" />
+              <div class="compare-line"></div>
+              <div class="compare-tags"><span class="compare-tag before">Before</span><span class="compare-tag after">After</span></div>
+              <input class="compare-range" type="range" min="0" max="100" value="50" aria-label="Comparison slider: Production Line, before and after" />
+            </div>
+            <figcaption class="compare-caption">
+              <span><b>Before</b> — Production delays &amp; unexpected downtime</span>
+              <span><b>After</b> — Smooth production &amp; controlled operations</span>
+            </figcaption>
+          </figure>
+        </div>
+
+        <div class="tabpanel" id="cpanel-1" role="tabpanel" aria-labelledby="ctab-1" tabindex="0" hidden>
+          <figure class="compare">
+            <div class="compare-media">
+              <img class="compare-img compare-after" src="images/Planned%20Maintenance%20%26%20Clear%20Execution.png" alt="After: planned maintenance and clear execution" loading="lazy" decoding="async" />
+              <img class="compare-img compare-before" src="images/Chaotic%20Maintenance%20%26%20Poor%20Coordination.png" alt="Before: chaotic maintenance and poor coordination" loading="lazy" decoding="async" />
+              <div class="compare-line"></div>
+              <div class="compare-tags"><span class="compare-tag before">Before</span><span class="compare-tag after">After</span></div>
+              <input class="compare-range" type="range" min="0" max="100" value="50" aria-label="Comparison slider: Maintenance Operations, before and after" />
+            </div>
+            <figcaption class="compare-caption">
+              <span><b>Before</b> — Chaotic maintenance &amp; poor coordination</span>
+              <span><b>After</b> — Planned maintenance &amp; clear execution</span>
+            </figcaption>
+          </figure>
+        </div>
+
+        <div class="tabpanel" id="cpanel-2" role="tabpanel" aria-labelledby="ctab-2" tabindex="0" hidden>
+          <figure class="compare">
+            <div class="compare-media">
+              <img class="compare-img compare-after" src="images/Organized%20Inventory%20%26%20Parts%20Availability.png" alt="After: organized inventory and parts availability" loading="lazy" decoding="async" />
+              <img class="compare-img compare-before" src="images/Disorganized%20Inventory%20%26%20Parts%20Shortages.png" alt="Before: disorganized inventory and parts shortages" loading="lazy" decoding="async" />
+              <div class="compare-line"></div>
+              <div class="compare-tags"><span class="compare-tag before">Before</span><span class="compare-tag after">After</span></div>
+              <input class="compare-range" type="range" min="0" max="100" value="50" aria-label="Comparison slider: Spare Parts and Inventory, before and after" />
+            </div>
+            <figcaption class="compare-caption">
+              <span><b>Before</b> — Disorganized inventory &amp; parts shortages</span>
+              <span><b>After</b> — Organized inventory &amp; parts availability</span>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container showcase">
+        <div>
+          <span class="eyebrow">EXECUTIVE VISIBILITY</span>
+          <h2>A dashboard built for decisions, not data overload</h2>
+          <p>See plant readiness, overdue work, downtime, work-order status, section performance, and the assets that require attention now.</p>
+          <ul>
+            <li>Reliability and maintenance compliance at a glance</li>
+            <li>Immediate drill-down from every KPI to the underlying work</li>
+            <li>Clear priorities for managers, engineers, and technicians</li>
+          </ul>
+        </div>
+        <img src="images/Executive%20Dashboard%20%26%20KPIs.png" alt="Executive CMMS dashboard for a car manufacturing plant" loading="lazy" decoding="async" />
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">WORKFORCE PERFORMANCE</span>
+          <h2>Know the workload, progress, and monthly output of every worker</h2>
+          <p>Balance assignments, identify bottlenecks early, and recognize high-performing teams using transparent operational data.</p>
+        </div>
+        <div class="image-panel"><img src="images/Worker%20Management%20Module.png" alt="CMMS workforce performance dashboard" loading="lazy" decoding="async" /></div>
+      </div>
+    </section>
+
+    <section id="gallery">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">INSIDE THE SYSTEM</span>
+          <h2>Every module, built for the plant floor</h2>
+          <p>Pick a module to preview the screen.</p>
+        </div>
+        <div class="showcase-switch">
+          <div class="switch-list" role="tablist" aria-label="System modules" aria-orientation="vertical">
+            <button class="switch-item" role="tab" id="mtab-0" aria-selected="true" aria-controls="mpanel-0" tabindex="0">
+              <span class="switch-icon" aria-hidden="true">🛡️</span>
+              <span><span class="switch-title">Preventive Maintenance</span><span class="switch-desc">Recurring schedules that re-arm on completion.</span></span>
+            </button>
+            <button class="switch-item" role="tab" id="mtab-1" aria-selected="false" aria-controls="mpanel-1" tabindex="-1">
+              <span class="switch-icon" aria-hidden="true">🔧</span>
+              <span><span class="switch-title">Corrective &amp; Alerts</span><span class="switch-desc">Reported faults routed to the right technician.</span></span>
+            </button>
+            <button class="switch-item" role="tab" id="mtab-2" aria-selected="false" aria-controls="mpanel-2" tabindex="-1">
+              <span class="switch-icon" aria-hidden="true">📱</span>
+              <span><span class="switch-title">Mobile &amp; Notifications</span><span class="switch-desc">Push alerts and task updates on the move.</span></span>
+            </button>
+            <button class="switch-item" role="tab" id="mtab-3" aria-selected="false" aria-controls="mpanel-3" tabindex="-1">
+              <span class="switch-icon" aria-hidden="true">📊</span>
+              <span><span class="switch-title">Reports &amp; Insights</span><span class="switch-desc">Performance history for every asset, automatically filed.</span></span>
+            </button>
+          </div>
+          <div class="switch-display">
+            <div class="switch-frame" id="mpanel-0" role="tabpanel" aria-labelledby="mtab-0">
+              <img src="images/Preventive%20Maintenance%20Module.png" alt="Preventive maintenance module screen" loading="lazy" decoding="async" />
+              <figcaption>Preventive Maintenance Module</figcaption>
+            </div>
+            <div class="switch-frame" id="mpanel-1" role="tabpanel" aria-labelledby="mtab-1" hidden>
+              <img src="images/Corrective%20Maintenance%20%26%20Alerts.png" alt="Corrective maintenance and alerts screen" loading="lazy" decoding="async" />
+              <figcaption>Corrective Maintenance &amp; Alerts</figcaption>
+            </div>
+            <div class="switch-frame" id="mpanel-2" role="tabpanel" aria-labelledby="mtab-2" hidden>
+              <img src="images/Mobile%20App%20%26%20Smart%20Notifications.png" alt="Mobile app and smart notifications screen" loading="lazy" decoding="async" />
+              <figcaption>Mobile App &amp; Smart Notifications</figcaption>
+            </div>
+            <div class="switch-frame" id="mpanel-3" role="tabpanel" aria-labelledby="mtab-3" hidden>
+              <img src="images/Reports%20%26%20Performance%20Insights.png" alt="Reports and performance insights screen" loading="lazy" decoding="async" />
+              <figcaption>Reports &amp; Performance Insights</figcaption>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="team">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">BUILT BY COMPLEMENTARY EXPERTISE</span>
+          <h2>Software engineering meets real maintenance operations</h2>
+        </div>
+        <div class="split">
+          <article class="expert">
+            <div class="expert-photo-col">
+              <img class="expert-photo" src="images/yunis.png" alt="Portrait of Yunis, Software Engineering lead" loading="lazy" decoding="async" />
+            </div>
+            <div class="expert-body">
+              <span class="tag">14+ years</span>
+              <h3>Software Engineering</h3>
+              <p>Professional experience designing dependable business systems that convert complex operations into clear, secure, and scalable digital workflows.</p>
+              <ul>
+                <li>Mission-critical system architecture</li>
+                <li>Business workflow analysis and automation</li>
+                <li>Reliable integrations and data protection</li>
+                <li>Usability, scalability, and operational trust</li>
+              </ul>
+            </div>
+          </article>
+          <article class="expert">
+            <div class="expert-photo-col">
+              <img class="expert-photo" src="images/fadi.png" alt="Portrait of Fadi, Maintenance and Engineering Management lead" loading="lazy" decoding="async" />
+            </div>
+            <div class="expert-body">
+              <span class="tag">13+ years</span>
+              <h3>Maintenance & Engineering Management</h3>
+              <p>Hands-on leadership in planning and executing maintenance work across demanding industrial and facility environments.</p>
+              <ul>
+                <li>Preventive and corrective maintenance planning</li>
+                <li>Asset reliability and downtime reduction</li>
+                <li>Engineering procedures and team supervision</li>
+                <li>Occupational safety, risk management, and KPIs</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="pilot">
+      <div class="container">
+        <div class="cta">
+          <span class="eyebrow">START SMALL. PROVE VALUE. SCALE.</span>
+          <h2>Launch the pilot on one line</h2>
+          <p>Load the first equipment set, activate maintenance schedules, measure the results, then expand with confidence across the plant.</p>
+          <a class="btn btn-primary" href="mailto:hello@rukn.example?subject=Smart%20CMMS%20Pilot">Request the pilot phase</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <div class="brand"><span class="brand-mark">R</span><span>RUKN</span></div>
+      <div>Smart systems for real operational challenges.</div>
+    </div>
+  </footer>
+
+  <script>
+    const words = [
+      "production moving.",
+      "maintenance planned.",
+      "management informed.",
+      "assets reliable.",
+      "downtime under control.",
+      "technicians on schedule.",
+      "spare parts stocked.",
+      "every shift covered.",
+      "reports up to date.",
+      "breakdowns from repeating.",
+      "the whole plant aligned.",
+      "your KPIs on target."
+    ];
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // ---- sentence-synced mini charts (index-matched to `words`) ----
+    const CHARTS = [
+      { kind:"spark", trend:"up", label:"Units produced / hour, this shift", points:[20,35,30,50,45,65,60,80,75,95] },
+      { kind:"gauge", value:93, color:"good", label:"Planned maintenance completed", sub:"PM tasks, this month" },
+      { kind:"ticker", label:"Live alert feed", items:[
+        { c:"bad", text:"Bearing #A14 overdue → routed to a technician" },
+        { c:"warn", text:"Conveyor B3 preventive check due today" },
+        { c:"good", text:"Corrective task #482 marked Done" },
+        { c:"info", text:"New issue reported: Motor overheating, Section 2" }
+      ] },
+      { kind:"gauge", value:99, color:"good", label:"Asset uptime", sub:"Rolling 30 days" },
+      { kind:"bar", from:100, to:26, color:"bad", label:"Unplanned downtime, indexed" },
+      { kind:"stacked", a:88, b:12, label:"Task completion, this week" },
+      { kind:"stock", label:"Spare parts on hand", items:[{l:"Bearings",v:72},{l:"Belts",v:54},{l:"Filters",v:88}] },
+      { kind:"dots", total:12, label:"Shifts covered, this week" },
+      { kind:"counter", from:0, to:47, suffix:"", sub:"Reports filed today" },
+      { kind:"spark", trend:"down", label:"Repeat breakdowns / month", points:[80,74,70,60,55,48,40,36,30,24] },
+      { kind:"dots", total:6, label:"Sections reporting green" },
+      { kind:"scorecard", items:[
+        {l:"PM Compliance",v:96},
+        {l:"MTTR",v:88},
+        {l:"Uptime",v:99},
+        {l:"Backlog",v:91},
+        {l:"SLA Response",v:94},
+        {l:"Emergency Work",v:85}
+      ] }
+    ];
+
+    function gaugeSVG(valuePct, colorVar) {
+      const r = 15.5, c = 2 * Math.PI * r;
+      const final = (c * (1 - valuePct / 100)).toFixed(2);
+      return '<svg viewBox="0 0 36 36" aria-hidden="true">' +
+        '<circle cx="18" cy="18" r="' + r + '" fill="none" stroke="var(--soft)" stroke-width="3.5"/>' +
+        '<circle class="ring" cx="18" cy="18" r="' + r + '" fill="none" stroke="' + colorVar + '" stroke-width="3.5" ' +
+        'stroke-linecap="round" stroke-dasharray="' + c.toFixed(2) + '" stroke-dashoffset="' + c.toFixed(2) + '" ' +
+        'data-final="' + final + '" transform="rotate(-90 18 18)"/></svg>';
+    }
+
+    function countSpan(start, target, suffix, extraClass) {
+      return '<span class="sc-count' + (extraClass ? " " + extraClass : "") + '" data-start="' + start + '" data-target="' + target + '" data-suffix="' + suffix + '">' + start + suffix + '</span>';
+    }
+    function renderGauge(cfg) {
+      const color = cfg.color === "bad" ? "var(--danger)" : "var(--green)";
+      return {
+        html: '<div class="sc-label">' + cfg.label + '</div><div class="sc-gauge-row">' +
+          '<div class="sc-gauge">' + gaugeSVG(cfg.value, color) + '</div>' +
+          '<div><div class="sc-gauge-val">' + countSpan(0, cfg.value, "%") + '</div><div class="sc-gauge-sub">' + (cfg.sub || "") + '</div></div></div>',
+        desc: cfg.label + ": " + cfg.value + "%"
+      };
+    }
+    function renderBar(cfg) {
+      const cls = cfg.color === "bad" ? "bad" : "good";
+      const start = cfg.color === "bad" ? cfg.from : 0;
+      return {
+        html: '<div class="sc-label">' + cfg.label + '</div><div class="sc-bar-num">' + countSpan(start, cfg.to, "%") + '</div>' +
+          '<div class="sc-bar-track"><span class="sc-bar-fill ' + cls + '" data-w="' + cfg.to + '" style="width:' + cfg.from + '%"></span></div>',
+        desc: cfg.label + ": " + cfg.from + "% → " + cfg.to + "%"
+      };
+    }
+    function renderStacked(cfg) {
+      return {
+        html: '<div class="sc-label">' + cfg.label + '</div>' +
+          '<div class="sc-stack-track"><span class="sc-stack-a" data-w="' + cfg.a + '"></span><span class="sc-stack-b" data-w="' + cfg.b + '"></span></div>' +
+          '<div class="sc-legend"><span class="a">On-time ' + countSpan(0, cfg.a, "%") + '</span><span class="b">Late ' + countSpan(0, cfg.b, "%") + '</span></div>',
+        desc: cfg.label + ": " + cfg.a + "% on-time, " + cfg.b + "% late"
+      };
+    }
+    function renderStock(cfg) {
+      const rows = cfg.items.map(function (it) {
+        return '<div class="sc-stock-row"><span class="lbl">' + it.l + '</span>' +
+          '<div class="sc-stock-track"><span class="sc-stock-fill" data-w="' + it.v + '"></span></div>' + countSpan(0, it.v, "%") + '</div>';
+      }).join("");
+      return { html: '<div class="sc-label">' + cfg.label + '</div>' + rows, desc: cfg.label + ": " + cfg.items.map(function (i) { return i.l + " " + i.v + "%"; }).join(", ") };
+    }
+    function renderDots(cfg) {
+      let dots = "";
+      for (let i = 0; i < cfg.total; i++) dots += '<span class="sc-dot" data-i="' + i + '"></span>';
+      return { html: '<div class="sc-label">' + cfg.label + '</div><div class="sc-dots-row">' + dots + '</div>', desc: cfg.label + ": " + cfg.total + " of " + cfg.total };
+    }
+    function renderCounter(cfg) {
+      return {
+        html: '<div class="sc-label">' + cfg.sub + '</div>' +
+          '<div class="sc-counter-num">' + countSpan(cfg.from, cfg.to, cfg.suffix || "") + '</div>' +
+          '<div class="sc-bar-track"><span class="sc-bar-fill good" data-w="88"></span></div>',
+        desc: cfg.sub + ": " + cfg.to
+      };
+    }
+    function renderSpark(cfg) {
+      const w = 280, h = 52, pts = cfg.points;
+      const max = Math.max.apply(null, pts), min = Math.min.apply(null, pts);
+      const stepX = w / (pts.length - 1);
+      const coords = pts.map(function (p, i) {
+        const x = i * stepX;
+        const y = h - ((p - min) / (max - min || 1)) * (h - 8) - 4;
+        return [x, y];
+      });
+      const lineD = coords.map(function (c, i) { return (i === 0 ? "M" : "L") + c[0].toFixed(1) + "," + c[1].toFixed(1); }).join(" ");
+      const fillD = lineD + " L" + w + "," + h + " L0," + h + " Z";
+      const cls = cfg.trend === "down" ? "bad" : "good";
+      const last = coords[coords.length - 1];
+      const first = pts[0];
+      const lastVal = pts[pts.length - 1];
+      const pct = first ? Math.round(((lastVal - first) / first) * 100) : 0;
+      const sign = pct > 0 ? "+" : "";
+      const leftPct = (last[0] / w * 100).toFixed(1);
+      const topPct = (last[1] / h * 100).toFixed(1);
+      return {
+        html: '<div class="sc-label-row"><span class="sc-label">' + cfg.label + '</span>' +
+          '<span class="sc-spark-delta ' + cls + '">' + sign + pct + '%</span></div>' +
+          '<div class="sc-spark-wrap">' +
+          '<svg class="sc-spark" viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none" aria-hidden="true">' +
+          '<path class="fill ' + cls + '" d="' + fillD + '"></path>' +
+          '<path class="line ' + cls + '" d="' + lineD + '"></path></svg>' +
+          '<span class="sc-spark-endpoint ' + cls + '" style="left:' + leftPct + '%;top:' + topPct + '%;"></span>' +
+          '</div>',
+        desc: cfg.label + ", trending " + cfg.trend + " (" + sign + pct + "%)"
+      };
+    }
+    function renderTicker(cfg) {
+      const rows = cfg.items.map(function (it, i) {
+        return '<div class="sc-ticker-row" data-i="' + i + '"><span class="sc-ticker-dot ' + it.c + '"></span><span class="sc-ticker-text">' + it.text + '</span></div>';
+      }).join("");
+      return {
+        html: '<div class="sc-label">' + cfg.label + '</div><div class="sc-ticker">' + rows + '</div>',
+        desc: cfg.label + ": " + cfg.items.map(function (i) { return i.text; }).join("; ")
+      };
+    }
+    function renderScorecard(cfg) {
+      const mgs = cfg.items.map(function (it) {
+        return '<div class="sc-mg">' + gaugeSVG(it.v, "var(--blue)") + '<span class="sc-mg-val">' + countSpan(0, it.v, "%") + '</span><span class="sc-mg-lbl">' + it.l + '</span></div>';
+      }).join("");
+      return { html: '<div class="sc-label">Executive KPIs</div><div class="sc-scorecard-row">' + mgs + '</div>', desc: "KPIs: " + cfg.items.map(function (i) { return i.l + " " + i.v + "%"; }).join(", ") };
+    }
+    function renderChart(idx) {
+      const cfg = CHARTS[idx];
+      switch (cfg.kind) {
+        case "gauge": return renderGauge(cfg);
+        case "bar": return renderBar(cfg);
+        case "stacked": return renderStacked(cfg);
+        case "stock": return renderStock(cfg);
+        case "dots": return renderDots(cfg);
+        case "counter": return renderCounter(cfg);
+        case "spark": return renderSpark(cfg);
+        case "ticker": return renderTicker(cfg);
+        case "scorecard": return renderScorecard(cfg);
+      }
+    }
+    function animateChart(container) {
+      function run() {
+        container.querySelectorAll(".sc-bar-fill[data-w], .sc-stock-fill[data-w], .sc-stack-a[data-w], .sc-stack-b[data-w]").forEach(function (el) {
+          el.style.width = el.dataset.w + "%";
+        });
+        container.querySelectorAll(".ring[data-final]").forEach(function (el) {
+          el.style.strokeDashoffset = el.dataset.final;
+        });
+        container.querySelectorAll(".sc-count[data-target]").forEach(function (span) {
+          const start = parseFloat(span.dataset.start) || 0;
+          const target = parseFloat(span.dataset.target) || 0;
+          const suffix = span.dataset.suffix || "";
+          if (reduceMotion) { span.textContent = target + suffix; return; }
+          const t0 = performance.now(), dur = 1100;
+          function step(now) {
+            const p = Math.min((now - t0) / dur, 1);
+            const eased = 1 - Math.pow(1 - p, 3);
+            span.textContent = Math.round(start + (target - start) * eased) + suffix;
+            if (p < 1) requestAnimationFrame(step);
+          }
+          requestAnimationFrame(step);
+        });
+        container.querySelectorAll(".sc-dot").forEach(function (dot, i) {
+          if (reduceMotion) { dot.classList.add("on"); return; }
+          setTimeout(function () { dot.classList.add("on"); }, i * 70);
+        });
+        container.querySelectorAll(".sc-ticker-row").forEach(function (row, i) {
+          if (reduceMotion) { row.classList.add("on"); return; }
+          setTimeout(function () { row.classList.add("on"); }, 200 + i * 550);
+        });
+        container.querySelectorAll(".sc-spark-wrap").forEach(function (wrap) {
+          const path = wrap.querySelector("path.line");
+          const dot = wrap.querySelector(".sc-spark-endpoint");
+          const len = path.getTotalLength();
+          path.style.strokeDasharray = len;
+          path.style.strokeDashoffset = len;
+          if (dot) dot.style.opacity = "0";
+          if (reduceMotion) {
+            path.style.strokeDashoffset = 0;
+            if (dot) dot.style.opacity = "1";
+            return;
+          }
+          requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+              path.style.transition = "stroke-dashoffset 1.1s cubic-bezier(.2,.8,.2,1)";
+              path.style.strokeDashoffset = 0;
+              setTimeout(function () { if (dot) dot.style.opacity = "1"; }, 1050);
+            });
+          });
+        });
+        const delta = container.querySelector(".sc-spark-delta");
+        if (delta) {
+          delta.style.opacity = "0";
+          if (reduceMotion) { delta.style.opacity = "1"; }
+          else { setTimeout(function () { delta.style.opacity = "1"; }, 1100); }
+        }
+      }
+      if (reduceMotion) { run(); } else { requestAnimationFrame(run); }
+    }
+    function showChart(idx) {
+      const container = document.getElementById("sentenceChart");
+      const descEl = document.getElementById("sentenceChartDesc");
+      if (!container) return;
+      const out = renderChart(idx);
+      container.innerHTML = '<div class="sc-fade-in">' + out.html + '</div>';
+      if (descEl) descEl.textContent = out.desc;
+      animateChart(container);
+    }
+
+    const output = document.getElementById("typewriter");
+    let wordIndex = 0, charIndex = 0, deleting = false;
+
+    function type() {
+      const word = words[wordIndex];
+      output.textContent = deleting ? word.slice(0, charIndex--) : word.slice(0, charIndex++);
+      let delay = deleting ? 45 : 80;
+
+      if (!deleting && charIndex > word.length) {
+        deleting = true;
+        delay = 1400;
+      } else if (deleting && charIndex < 0) {
+        deleting = false;
+        wordIndex = (wordIndex + 1) % words.length;
+        charIndex = 0;
+        delay = 260;
+        showChart(wordIndex);
+      }
+      setTimeout(type, delay);
+    }
+    if (reduceMotion) {
+      output.textContent = words[0];
+      showChart(0);
+    } else {
+      showChart(0);
+      type();
+    }
+
+    // ---- before / after comparison sliders ----
+    document.querySelectorAll(".compare").forEach(function (card) {
+      const media = card.querySelector(".compare-media");
+      const range = card.querySelector(".compare-range");
+      function update() { media.style.setProperty("--pos", range.value + "%"); }
+      range.addEventListener("input", update);
+      update();
+    });
+
+    // ---- generic accessible tabs (before/after, module showcase) ----
+    function initTabs(tabSelector, panelPrefixFrom) {
+      const tabs = Array.from(document.querySelectorAll(tabSelector));
+      if (!tabs.length) return;
+      function select(tab) {
+        tabs.forEach(function (t) {
+          const selected = t === tab;
+          t.setAttribute("aria-selected", selected ? "true" : "false");
+          t.tabIndex = selected ? 0 : -1;
+          const panel = document.getElementById(t.getAttribute("aria-controls"));
+          if (panel) panel.hidden = !selected;
+        });
+        tab.focus();
+      }
+      tabs.forEach(function (tab, i) {
+        tab.addEventListener("click", function () { select(tab); });
+        tab.addEventListener("keydown", function (e) {
+          let idx = i;
+          if (e.key === "ArrowRight" || e.key === "ArrowDown") { idx = (i + 1) % tabs.length; }
+          else if (e.key === "ArrowLeft" || e.key === "ArrowUp") { idx = (i - 1 + tabs.length) % tabs.length; }
+          else if (e.key === "Home") { idx = 0; }
+          else if (e.key === "End") { idx = tabs.length - 1; }
+          else { return; }
+          e.preventDefault();
+          select(tabs[idx]);
+        });
+      });
+    }
+    initTabs("#compare .tab-btn");
+    initTabs(".switch-item");
+
+    // ---- scroll reveal ----
+    const revealEls = document.querySelectorAll(".reveal");
+    if (reduceMotion || !("IntersectionObserver" in window)) {
+      revealEls.forEach(function (el) { el.classList.add("in"); });
+    } else {
+      const io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("in");
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.2 });
+      revealEls.forEach(function (el) { io.observe(el); });
+    }
+
+    // ---- animated bars (shared by the pulse panel) ----
+    function fillBars(scope) {
+      scope.querySelectorAll(".bar-fill").forEach(function (bar) { bar.style.width = bar.dataset.w + "%"; });
+    }
+
+    // ---- pulse panel number counters ----
+    function runCounters(scope) {
+      scope.querySelectorAll(".pulse-num").forEach(function (span) {
+        const start = parseInt(span.dataset.start, 10) || 0;
+        const target = parseInt(span.dataset.target, 10) || 0;
+        const suffix = span.dataset.suffix || "";
+        if (reduceMotion) { span.textContent = target + suffix; return; }
+        const t0 = performance.now(), duration = 1300;
+        function step(now) {
+          const p = Math.min((now - t0) / duration, 1);
+          const eased = 1 - Math.pow(1 - p, 3);
+          const value = Math.round(start + (target - start) * eased);
+          span.textContent = value + suffix;
+          if (p < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      });
+    }
+
+    const pulsePanel = document.querySelector(".pulse-panel");
+    if (pulsePanel) {
+      if (reduceMotion || !("IntersectionObserver" in window)) {
+        fillBars(pulsePanel);
+        runCounters(pulsePanel);
+      } else {
+        const pulseIo = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              fillBars(pulsePanel);
+              runCounters(pulsePanel);
+              pulseIo.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.4 });
+        pulseIo.observe(pulsePanel);
+      }
+    }
+  </script>
+</body>
+</html>
